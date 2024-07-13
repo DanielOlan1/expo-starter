@@ -2,8 +2,8 @@ import {Text, ActivityIndicator, View} from 'react-native';
 
 import {usePrivy} from '@privy-io/expo';
 
-import {HomeScreen} from './HomeScreen';
-import {LoginScreen} from './LoginScreen';
+import {HomeScreen} from './screens/HomeScreen';
+import {LoginScreen} from './screens/LoginScreen';
 
 export const Wrapper = () => {
   const {user, isReady} = usePrivy();

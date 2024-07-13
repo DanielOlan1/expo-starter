@@ -5,8 +5,8 @@ import {Text, TextInput, View} from "react-native";
 
 import {usePrivy, useLoginWithEmail, useOAuthFlow} from "@privy-io/expo";
 
-import {Button} from "./Button";
-import {styles} from "./styles";
+import {Button} from "../components/Button";
+import {styles} from "../styles";
 
 export const LoginScreen = () => {
   const [email, setEmail] = useState(Constants.expoConfig?.extra?.email || "");
@@ -29,7 +29,7 @@ export const LoginScreen = () => {
   if (user) {
     return (
       <View style={styles.container}>
-        <Text>Looks like you are already logged in</Text>;
+        <Text>Looks like you are already logged in</Text>
       </View>
     );
   }

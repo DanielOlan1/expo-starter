@@ -10,7 +10,7 @@ import {PrivyProvider} from "@privy-io/expo";
 import {Wrapper} from "./Wrapper";
 
 export default function App() {
-  if (Constants.expoConfig?.extra?.privyAppId === "<your-app-id>") {
+  if (Constants.expoConfig?.extra?.privyAppId === "clyah1e3600pz1qdwmit0j2a2") {
     return (
       <SafeAreaView>
         <View

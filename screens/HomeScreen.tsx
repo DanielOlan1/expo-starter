@@ -1,5 +1,5 @@
-import React, {useState, useCallback} from "react";
-import {Text, TextInput, View, ScrollView} from "react-native";
+import React, { useState, useCallback } from "react";
+import { Text, TextInput, View, ScrollView } from "react-native";
 
 import {
   usePrivy,
@@ -8,10 +8,10 @@ import {
   getUserEmbeddedWallet,
   PrivyEmbeddedWalletProvider,
 } from "@privy-io/expo";
-import {PrivyUser} from "@privy-io/public-api";
+import { PrivyUser } from "@privy-io/public-api";
 
-import {Button} from "./Button";
-import {styles} from "./styles";
+import { Button } from "../components/Button";
+import { styles } from "../styles";
 
 const toMainIdentifier = (x: PrivyUser["linked_accounts"][number]) => {
   if (x.type === "phone") {
@@ -20,16 +20,14 @@ const toMainIdentifier = (x: PrivyUser["linked_accounts"][number]) => {
   if (x.type === "email" || x.type === "wallet") {
     return x.address;
   }
-
-  if (x.type === "twitter_oauth" || x.type === "tiktok_oauth") {
+  if (x.type === "twitter_oauth" || x.type === "tiktok_oauth" || x.type === "farcaster") {
     return x.username;
   }
-
   if (x.type === "custom_auth") {
     return x.custom_user_id;
   }
 
-  return x.email;
+  return "Unknown";
 };
 
 export const HomeScreen = () => {
@@ -37,7 +35,7 @@ export const HomeScreen = () => {
   const [chainId, setChainId] = useState("1");
   const [signedMessages, setSignedMessages] = useState<string[]>([]);
 
-  const {logout, user} = usePrivy();
+  const { logout, user } = usePrivy();
   const oauth = useOAuthFlow();
   const wallet = useEmbeddedWallet();
   const account = getUserEmbeddedWallet(user);
@@ -64,7 +62,7 @@ export const HomeScreen = () => {
       try {
         await provider.request({
           method: "wallet_switchEthereumChain",
-          params: [{chainId: id}],
+          params: [{ chainId: id }],
         });
         alert(`Chain switched to ${id} successfully`);
       } catch (e) {
@@ -82,13 +80,13 @@ export const HomeScreen = () => {
     <View style={styles.container}>
       <Button onPress={logout}>Logout</Button>
 
-      <View style={{display: "flex", flexDirection: "row", gap: 5, margin: 10}}>
+      <View style={{ display: "flex", flexDirection: "row", gap: 5, margin: 10 }}>
         {(["github", "google", "discord", "apple"] as const).map((provider) => (
           <View key={provider}>
             <Button
               disabled={oauth.state.status === "loading"}
               loading={oauth.state.status === "loading"}
-              onPress={() => oauth.start({provider})}
+              onPress={() => oauth.start({ provider })}
             >
               {`Link ${provider}`}
             </Button>
@@ -105,7 +103,7 @@ export const HomeScreen = () => {
         />
       )}
 
-      <ScrollView style={{borderColor: "rgba(0,0,0,0.1)", borderWidth: 1}}>
+      <ScrollView style={{ borderColor: "rgba(0,0,0,0.1)", borderWidth: 1 }}>
         <View
           style={{
             padding: 20,
@@ -115,14 +113,14 @@ export const HomeScreen = () => {
           }}
         >
           <View>
-            <Text style={{fontWeight: "bold"}}>User ID</Text>
+            <Text style={{ fontWeight: "bold" }}>User ID</Text>
             <Text>{user.id}</Text>
           </View>
 
           <View>
-            <Text style={{fontWeight: "bold"}}>Linked accounts</Text>
+            <Text style={{ fontWeight: "bold" }}>Linked accounts</Text>
             {user?.linked_accounts.length ? (
-              <View style={{display: "flex", flexDirection: "column"}}>
+              <View style={{ display: "flex", flexDirection: "column" }}>
                 {user?.linked_accounts?.map((m) => (
                   <Text
                     key={m.verified_at}
@@ -142,7 +140,7 @@ export const HomeScreen = () => {
           <View>
             {account?.address && (
               <>
-                <Text style={{fontWeight: "bold"}}>Embedded Wallet</Text>
+                <Text style={{ fontWeight: "bold" }}>Embedded Wallet</Text>
                 <Text>{account?.address}</Text>
               </>
             )}
@@ -182,7 +180,7 @@ export const HomeScreen = () => {
             )}
           </View>
 
-          <View style={{display: "flex", flexDirection: "column"}}>
+          <View style={{ display: "flex", flexDirection: "column" }}>
             {signedMessages.map((m) => (
               <React.Fragment key={m}>
                 <Text
